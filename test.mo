@@ -124,16 +124,16 @@ actor Test {
   public query func test(): async Text {
     var randomSeed = 1:Nat64;
 
-    let array = Array.init<Int8>(100000, 0);
+    let array = Array.init<Nat32>(100000, 0);
 
     for (i in array.keys()) {
-      array[i] := randomInt8(randomSeed);
+      array[i] := randomNat32(randomSeed);
 
       randomSeed +%= 1;
     };
 
     let cost = IC.countInstructions(func() {
-      sortInt8<Int8>(array, func(item) = item);
+      sortNat32<Nat32>(array, func(item) = item);
     });
 
     let iter = array.keys();
