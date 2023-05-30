@@ -38,15 +38,14 @@ module {
 
     i := from;
 
-    let minNat64 = int64ToNat64(min);
-    let minMaxDiff = int64ToNat64(max) -% minNat64;
+    let minMaxDiff = int64ToNat64(max -% min);
     let scale = 0xffffffffffffffff / minMaxDiff;
     let step = scale *% minMaxDiff / nat64(nat(to -% from));
     let to64 = nat64(nat(to));
 
     while (i <= to) {
       let iNat = nat(i);
-      let index = nat64ToNat(to64 -% scale *% (int64ToNat64(map(array[iNat])) -% minNat64) / step);
+      let index = nat64ToNat(to64 -% scale *% int64ToNat64(map(array[iNat]) -% min) / step);
 
       indexes[iNat] := index;
       counts[index] +%= 1;

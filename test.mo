@@ -39,7 +39,7 @@ actor Test {
     hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
     hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
 
-    return -Prim.intToInt8(Prim.nat64ToNat(hash >> 31 ^ hash & 0x7f));
+    return Prim.nat8ToInt8(Prim.intToNat8Wrap(Prim.nat64ToNat(hash >> 31 ^ hash & 0xff)));
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ actor Test {
     hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
     hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
 
-    return -Prim.intToInt16(Prim.nat64ToNat(hash >> 31 ^ hash & 0x7fff));
+    return Prim.nat16ToInt16(Prim.intToNat16Wrap(Prim.nat64ToNat(hash >> 31 ^ hash & 0xffff)));
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ actor Test {
     hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
     hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
 
-    return -Prim.intToInt32(Prim.nat64ToNat(hash >> 31 ^ hash & 0x7fffffff));
+    return Prim.nat32ToInt32(Prim.intToNat32Wrap(Prim.nat64ToNat(hash >> 31 ^ hash & 0xffffffff)));
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ actor Test {
     hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
     hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
 
-    return -Prim.intToInt64(Prim.nat64ToNat(hash >> 31 ^ hash & 0x7fffffffffffffff));
+    return Prim.nat64ToInt64(hash >> 31 ^ hash);
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,16 +124,16 @@ actor Test {
   public query func test(): async Text {
     var randomSeed = 1:Nat64;
 
-    let array = Array.init<Nat32>(100000, 0);
+    let array = Array.init<Int8>(100000, 0);
 
     for (i in array.keys()) {
-      array[i] := randomNat32(randomSeed);
+      array[i] := randomInt8(randomSeed);
 
       randomSeed +%= 1;
     };
 
     let cost = IC.countInstructions(func() {
-      sortNat32<Nat32>(array, func(item) = item);
+      sortInt8<Int8>(array, func(item) = item);
     });
 
     let iter = array.keys();
