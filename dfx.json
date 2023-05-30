@@ -1,0 +1,10 @@
+{
+  "canisters": {
+    "sort": {
+      "build": "build.sh sort test.mo",
+      "candid": ".dfx/local/canisters/sort/sort.did",
+      "type": "custom",
+      "wasm": ".dfx/local/canisters/sort/sort.wasm.gz"
+    }
+  }
+}
