@@ -1,5 +1,4 @@
 import { Array_init = initArray; intToFloat; floatToInt; nat32ToNat = nat; intToNat32Wrap = nat32; abs } "mo:prim";
-import Debug "mo:base/Debug";
 
 module {
   func sort<T>(

@@ -1,9 +1,9 @@
-import { Array_init = initArray; nat8ToNat; nat32ToNat = nat; nat64ToNat; intToNat32Wrap = nat32; intToNat64Wrap = nat64 } "mo:prim";
+import { Array_init = initArray; nat32ToNat = nat; int64ToNat64; nat64ToNat; intToNat32Wrap = nat32; intToNat64Wrap = nat64 } "mo:prim";
 
 module {
   func sort<T>(
     array: [var T],
-    map: (item: T) -> Nat8,
+    map: (item: T) -> Int64,
     twin: [var T],
     indexes: [var Nat],
     counts: [var Nat32],
@@ -38,14 +38,15 @@ module {
 
     i := from;
 
-    let minMaxDiff = nat64(nat8ToNat(max -% min));
+    let minNat64 = int64ToNat64(min);
+    let minMaxDiff = int64ToNat64(max) -% minNat64;
     let scale = 0xffffffffffffffff / minMaxDiff;
     let step = scale *% minMaxDiff / nat64(nat(to -% from));
-    let from64 = nat64(nat(from));
+    let to64 = nat64(nat(to));
 
     while (i <= to) {
       let iNat = nat(i);
-      let index = nat64ToNat(from64 +% scale *% nat64(nat8ToNat(map(array[iNat]) -% min)) / step);
+      let index = nat64ToNat(to64 -% scale *% (int64ToNat64(map(array[iNat])) -% minNat64) / step);
 
       indexes[iNat] := index;
       counts[index] +%= 1;
@@ -105,7 +106,7 @@ module {
           let item1 = array[index1];
           let item2 = array[index2];
 
-          if (map(item1) > map(item2)) {
+          if (map(item1) < map(item2)) {
             array[index1] := item2;
             array[index2] := item1;
           };
@@ -117,21 +118,21 @@ module {
           var item2 = array[index2];
           var item3 = array[index3];
 
-          if (map(item1) > map(item2)) {
+          if (map(item1) < map(item2)) {
             let temp = item1;
 
             item1 := item2;
             item2 := temp;
           };
 
-          if (map(item1) > map(item3)) {
+          if (map(item1) < map(item3)) {
             let temp = item1;
 
             item1 := item3;
             item3 := temp;
           };
 
-          if (map(item2) > map(item3)) {
+          if (map(item2) < map(item3)) {
             let temp = item2;
 
             item2 := item3;
@@ -151,35 +152,35 @@ module {
           var item3 = array[index3];
           var item4 = array[index4];
 
-          if (map(item1) > map(item2)) {
+          if (map(item1) < map(item2)) {
             let temp = item1;
 
             item1 := item2;
             item2 := temp;
           };
 
-          if (map(item3) > map(item4)) {
+          if (map(item3) < map(item4)) {
             let temp = item3;
 
             item3 := item4;
             item4 := temp;
           };
 
-          if (map(item1) > map(item3)) {
+          if (map(item1) < map(item3)) {
             let temp = item1;
 
             item1 := item3;
             item3 := temp;
           };
 
-          if (map(item2) > map(item4)) {
+          if (map(item2) < map(item4)) {
             let temp = item2;
 
             item2 := item4;
             item4 := temp;
           };
 
-          if (map(item2) > map(item3)) {
+          if (map(item2) < map(item3)) {
             let temp = item2;
 
             item2 := item3;
@@ -201,9 +202,9 @@ module {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  public func sortNat8<T>(
+  public func sortInt64Desc<T>(
     array: [var T],
-    map: (item: T) -> Nat8,
+    map: (item: T) -> Int64,
   ) {
     let size = array.size();
 

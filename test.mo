@@ -5,11 +5,21 @@ import Debug "mo:base/Debug";
 import { time } "mo:prim";
 import { sortFloat } "./src/sortFloat";
 import { sortInt8 } "./src/sortInt8";
+import { sortInt8Desc } "./src/sortInt8Desc";
 import { sortInt16 } "./src/sortInt16";
+import { sortInt16Desc } "./src/sortInt16Desc";
 import { sortInt32 } "./src/sortInt32";
+import { sortInt32Desc } "./src/sortInt32Desc";
+import { sortInt64 } "./src/sortInt64";
+import { sortInt64Desc } "./src/sortInt64Desc";
 import { sortNat8 } "./src/sortNat8";
+import { sortNat8Desc } "./src/sortNat8Desc";
 import { sortNat16 } "./src/sortNat16";
+import { sortNat16Desc } "./src/sortNat16Desc";
 import { sortNat32 } "./src/sortNat32";
+import { sortNat32Desc } "./src/sortNat32Desc";
+import { sortNat64 } "./src/sortNat64";
+import { sortNat64Desc } "./src/sortNat64Desc";
 
 actor Test {
   func randomFloat(key: Nat64): Float {
@@ -51,7 +61,18 @@ actor Test {
     hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
     hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
 
-    return -Prim.intToInt32(Prim.nat64ToNat(hash >> 31 ^ hash & 0x3fffffff));
+    return -Prim.intToInt32(Prim.nat64ToNat(hash >> 31 ^ hash & 0x7fffffff));
+  };
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  func randomInt64(key: Nat64): Int64 {
+    var hash = key;
+
+    hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
+    hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
+
+    return -Prim.intToInt64(Prim.nat64ToNat(hash >> 31 ^ hash & 0x7fffffffffffffff));
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +105,18 @@ actor Test {
     hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
     hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
 
-    return Prim.intToNat32Wrap(Prim.nat64ToNat(hash >> 31 ^ hash & 0x3fffffff));
+    return Prim.intToNat32Wrap(Prim.nat64ToNat(hash >> 31 ^ hash & 0xffffffff));
+  };
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  func randomNat64(key: Nat64): Nat64 {
+    var hash = key;
+
+    hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
+    hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
+
+    return hash >> 31 ^ hash;
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

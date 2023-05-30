@@ -39,12 +39,13 @@ module {
     i := from;
 
     let minMaxDiff = nat64(nat16ToNat(max -% min));
-    let interval = nat64(nat(to -% from));
+    let scale = 0xffffffffffffffff / minMaxDiff;
+    let step = scale *% minMaxDiff / nat64(nat(to -% from));
     let from64 = nat64(nat(from));
 
     while (i <= to) {
       let iNat = nat(i);
-      let index = nat64ToNat(from64 +% nat64(nat16ToNat(map(array[iNat]) -% min)) *% interval / minMaxDiff);
+      let index = nat64ToNat(from64 +% scale *% nat64(nat16ToNat(map(array[iNat]) -% min)) / step);
 
       indexes[iNat] := index;
       counts[index] +%= 1;

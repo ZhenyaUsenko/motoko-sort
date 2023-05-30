@@ -1,4 +1,4 @@
-import { Array_init = initArray; int32ToInt = int; nat32ToNat = nat; nat64ToNat; intToNat32Wrap = nat32; intToNat64Wrap = nat64 } "mo:prim";
+import { Array_init = initArray; int32ToNat32; nat32ToNat = nat; intToNat32Wrap = nat32 } "mo:prim";
 
 module {
   func sort<T>(
@@ -38,13 +38,14 @@ module {
 
     i := from;
 
-    let minMaxDiff = nat64(int(max -% min));
-    let interval = nat64(nat(to -% from));
-    let from64 = nat64(nat(from));
+    let minNat32 = int32ToNat32(min);
+    let minMaxDiff = int32ToNat32(max) -% minNat32;
+    let scale = 0xffffffff / minMaxDiff;
+    let step = scale *% minMaxDiff / (to -% from) +% 1;
 
     while (i <= to) {
       let iNat = nat(i);
-      let index = nat64ToNat(from64 +% nat64(int(map(array[iNat]) -% min)) *% interval / minMaxDiff);
+      let index = nat(from +% scale *% (int32ToNat32(map(array[iNat])) -% minNat32) / step);
 
       indexes[iNat] := index;
       counts[index] +%= 1;
