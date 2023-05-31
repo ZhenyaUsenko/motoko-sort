@@ -1,0 +1,37 @@
+import SortFloat "./sortFloat";
+import SortInt8 "./sortInt8";
+import SortInt8Desc "./sortInt8Desc";
+import SortInt16 "./sortInt16";
+import SortInt16Desc "./sortInt16Desc";
+import SortInt32 "./sortInt32";
+import SortInt32Desc "./sortInt32Desc";
+import SortInt64 "./sortInt64";
+import SortInt64Desc "./sortInt64Desc";
+import SortNat8 "./sortNat8";
+import SortNat8Desc "./sortNat8Desc";
+import SortNat16 "./sortNat16";
+import SortNat16Desc "./sortNat16Desc";
+import SortNat32 "./sortNat32";
+import SortNat32Desc "./sortNat32Desc";
+import SortNat64 "./sortNat64";
+import SortNat64Desc "./sortNat64Desc";
+
+module {
+  public let { sortFloat } = SortFloat;
+  public let { sortInt8 } = SortInt8;
+  public let { sortInt8Desc } = SortInt8Desc;
+  public let { sortInt16 } = SortInt16;
+  public let { sortInt16Desc } = SortInt16Desc;
+  public let { sortInt32 } = SortInt32;
+  public let { sortInt32Desc } = SortInt32Desc;
+  public let { sortInt64 } = SortInt64;
+  public let { sortInt64Desc } = SortInt64Desc;
+  public let { sortNat8 } = SortNat8;
+  public let { sortNat8Desc } = SortNat8Desc;
+  public let { sortNat16 } = SortNat16;
+  public let { sortNat16Desc } = SortNat16Desc;
+  public let { sortNat32 } = SortNat32;
+  public let { sortNat32Desc } = SortNat32Desc;
+  public let { sortNat64 } = SortNat64;
+  public let { sortNat64Desc } = SortNat64Desc;
+};

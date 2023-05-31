@@ -1,115 +1,14 @@
-import IC "mo:base/ExperimentalInternetComputer";
-import Prim "mo:prim";
 import Array "mo:base/Array";
 import Debug "mo:base/Debug";
+import IC "mo:base/ExperimentalInternetComputer";
+import Nat32 "mo:base/Nat32";
+import Prim "mo:prim";
 import { time } "mo:prim";
-import { sortFloat } "./src/sortFloat";
-import { sortInt8 } "./src/sortInt8";
-import { sortInt8Desc } "./src/sortInt8Desc";
-import { sortInt16 } "./src/sortInt16";
-import { sortInt16Desc } "./src/sortInt16Desc";
-import { sortInt32 } "./src/sortInt32";
-import { sortInt32Desc } "./src/sortInt32Desc";
-import { sortInt64 } "./src/sortInt64";
-import { sortInt64Desc } "./src/sortInt64Desc";
-import { sortNat8 } "./src/sortNat8";
-import { sortNat8Desc } "./src/sortNat8Desc";
-import { sortNat16 } "./src/sortNat16";
-import { sortNat16Desc } "./src/sortNat16Desc";
-import { sortNat32 } "./src/sortNat32";
-import { sortNat32Desc } "./src/sortNat32Desc";
-import { sortNat64 } "./src/sortNat64";
-import { sortNat64Desc } "./src/sortNat64Desc";
+import { sortFloat } "./src/sort";
+import { sortInt8; sortInt8Desc; sortInt16; sortInt16Desc; sortInt32; sortInt32Desc; sortInt64; sortInt64Desc } "./src/sort";
+import { sortNat8; sortNat8Desc; sortNat16; sortNat16Desc; sortNat32; sortNat32Desc; sortNat64; sortNat64Desc } "./src/sort";
 
 actor Test {
-  func randomFloat(key: Nat64): Float {
-    var hash = key;
-
-    hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
-    hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
-
-    return Prim.intToFloat(Prim.nat64ToNat(hash >> 31 ^ hash));
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  func randomInt8(key: Nat64): Int8 {
-    var hash = key;
-
-    hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
-    hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
-
-    return Prim.nat8ToInt8(Prim.intToNat8Wrap(Prim.nat64ToNat(hash >> 31 ^ hash & 0xff)));
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  func randomInt16(key: Nat64): Int16 {
-    var hash = key;
-
-    hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
-    hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
-
-    return Prim.nat16ToInt16(Prim.intToNat16Wrap(Prim.nat64ToNat(hash >> 31 ^ hash & 0xffff)));
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  func randomInt32(key: Nat64): Int32 {
-    var hash = key;
-
-    hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
-    hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
-
-    return Prim.nat32ToInt32(Prim.intToNat32Wrap(Prim.nat64ToNat(hash >> 31 ^ hash & 0xffffffff)));
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  func randomInt64(key: Nat64): Int64 {
-    var hash = key;
-
-    hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
-    hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
-
-    return Prim.nat64ToInt64(hash >> 31 ^ hash);
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  func randomNat8(key: Nat64): Nat8 {
-    var hash = key;
-
-    hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
-    hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
-
-    return Prim.intToNat8Wrap(Prim.nat64ToNat(hash >> 31 ^ hash & 0xff));
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  func randomNat16(key: Nat64): Nat16 {
-    var hash = key;
-
-    hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
-    hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
-
-    return Prim.intToNat16Wrap(Prim.nat64ToNat(hash >> 31 ^ hash & 0xffff));
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  func randomNat32(key: Nat64): Nat32 {
-    var hash = key;
-
-    hash := hash >> 30 ^ hash *% 0xbf58476d1ce4e5b9;
-    hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
-
-    return Prim.intToNat32Wrap(Prim.nat64ToNat(hash >> 31 ^ hash & 0xffffffff));
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
   func randomNat64(key: Nat64): Nat64 {
     var hash = key;
 
@@ -117,6 +16,38 @@ actor Test {
     hash := hash >> 27 ^ hash *% 0x94d049bb133111eb;
 
     return hash >> 31 ^ hash;
+  };
+
+  func randomNat32(key: Nat64): Nat32 {
+    return Prim.intToNat32Wrap(Prim.nat64ToNat(randomNat64(key) & 0xffffffff));
+  };
+
+  func randomNat16(key: Nat64): Nat16 {
+    return Prim.intToNat16Wrap(Prim.nat64ToNat(randomNat64(key) & 0xffff));
+  };
+
+  func randomNat8(key: Nat64): Nat8 {
+    return Prim.intToNat8Wrap(Prim.nat64ToNat(randomNat64(key) & 0xff));
+  };
+
+  func randomInt64(key: Nat64): Int64 {
+    return Prim.nat64ToInt64(randomNat64(key));
+  };
+
+  func randomInt32(key: Nat64): Int32 {
+    return Prim.nat32ToInt32(Prim.intToNat32Wrap(Prim.nat64ToNat(randomNat64(key) & 0xffffffff)));
+  };
+
+  func randomInt16(key: Nat64): Int16 {
+    return Prim.nat16ToInt16(Prim.intToNat16Wrap(Prim.nat64ToNat(randomNat64(key) & 0xffff)));
+  };
+
+  func randomInt8(key: Nat64): Int8 {
+    return Prim.nat8ToInt8(Prim.intToNat8Wrap(Prim.nat64ToNat(randomNat64(key) & 0xff)));
+  };
+
+  func randomFloat(key: Nat64): Float {
+    return Prim.intToFloat(Prim.nat64ToNat(randomNat64(key)));
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,6 +64,7 @@ actor Test {
     };
 
     let cost = IC.countInstructions(func() {
+      //Array.sortInPlace(array, Nat32.compare);
       sortNat32<Nat32>(array, func(item) = item);
     });
 

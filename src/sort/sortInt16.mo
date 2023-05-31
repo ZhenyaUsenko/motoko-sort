@@ -1,11 +1,10 @@
-import { Array_init = initArray; intToFloat; floatToInt; nat32ToNat = nat; intToNat32Wrap = nat32; abs } "mo:prim";
+import { Array_init = initArray; nat16ToNat; int16ToNat16; nat32ToNat = nat; nat64ToNat; intToNat32Wrap = nat32; intToNat64Wrap = nat64 } "mo:prim";
 
 module {
   func sort<T>(
     array: [var T],
-    map: (item: T) -> Float,
+    map: (item: T) -> Int16,
     twin: [var T],
-    indexes: [var Nat],
     counts: [var Nat32],
     gaplessCounts: [var Nat32],
     subArray: Bool,
@@ -38,15 +37,14 @@ module {
 
     i := from;
 
-    let minMaxDiff = max - min;
-    let interval = intToFloat(nat(to -% from));
-    let fromFloat = intToFloat(nat(from));
+    let minMaxDiff = nat64(nat16ToNat(int16ToNat16(max -% min)));
+    let scale = 0xffffffffffffffff / minMaxDiff;
+    let step = scale *% minMaxDiff / nat64(nat(to -% from));
+    let from64 = nat64(nat(from));
 
     while (i <= to) {
-      let iNat = nat(i);
-      let index = abs(floatToInt(fromFloat + (map(array[iNat]) - min) * interval / minMaxDiff));
+      let index = nat64ToNat(from64 +% scale *% nat64(nat16ToNat(int16ToNat16(map(array[nat(i)]) -% min))) / step);
 
-      indexes[iNat] := index;
       counts[index] +%= 1;
 
       i +%= 1;
@@ -73,7 +71,7 @@ module {
 
     while (i <= to) {
       let iNat = nat(i);
-      let index = indexes[iNat];
+      let index = nat64ToNat(from64 +% scale *% nat64(nat16ToNat(int16ToNat16(map(array[iNat]) -% min))) / step);
       let count = counts[index];
 
       twin[nat(count)] := array[iNat];
@@ -190,7 +188,7 @@ module {
           array[index3] := item3;
           array[index4] := item4;
         } else {
-          sort(array, map, twin, indexes, counts, gaplessCounts, true, i, i +% count -% 1);
+          sort(array, map, twin, counts, gaplessCounts, true, i, i +% count -% 1);
         };
       };
 
@@ -200,9 +198,9 @@ module {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  public func sortFloat<T>(
+  public func sortInt16<T>(
     array: [var T],
-    map: (item: T) -> Float,
+    map: (item: T) -> Int16,
   ) {
     let size = array.size();
 
@@ -210,7 +208,6 @@ module {
       array,
       map,
       initArray<T>(size, array[0]),
-      initArray<Nat>(size, 0),
       initArray<Nat32>(size, 0),
       initArray<Nat32>(size, 0),
       false,
