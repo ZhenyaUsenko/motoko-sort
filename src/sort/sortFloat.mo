@@ -11,19 +11,23 @@ module {
     from: Nat32,
     to: Nat32,
   ) {
-    var min = map(array[nat(to)]);
+    var prevValue = map(array[nat(from)]);
+    var min = prevValue;
     var max = min;
-    var i = from;
+    var sorted = true;
+    var i = from +% 1;
 
-    while (i < to) {
+    while (i <= to) {
       let value = map(array[nat(i)]);
 
       if (value > max) max := value else if (value < min) min := value;
 
+      if (sorted) if (prevValue > value) sorted := false else prevValue := value;
+
       i +%= 1;
     };
 
-    if (min == max) return;
+    if (sorted) return;
 
     if (subArray) {
       i := from;
