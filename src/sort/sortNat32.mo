@@ -4,9 +4,9 @@ module {
   func sort<T>(
     array: [var T],
     map: (item: T) -> Nat32,
-    twin: [var T],
+    twinArray: [var T],
     counts: [var Nat32],
-    gaplessCounts: [var Nat32],
+    shiftedCounts: [var Nat32],
     subArray: Bool,
     from: Nat32,
     to: Nat32,
@@ -58,7 +58,7 @@ module {
       let count = counts[iNat];
 
       if (count != 0) {
-        gaplessCounts[nat(totalCount)] := count;
+        shiftedCounts[nat(totalCount)] := count;
         counts[iNat] := totalCount;
         totalCount +%= count;
       };
@@ -69,11 +69,11 @@ module {
     i := from;
 
     while (i <= to) {
-      let iNat = nat(i);
-      let index = nat(from +% scale *% (map(array[iNat]) -% min) / step);
+      let item = array[nat(i)];
+      let index = nat(from +% scale *% (map(item) -% min) / step);
       let count = counts[index];
 
-      twin[nat(count)] := array[iNat];
+      twinArray[nat(count)] := item;
       counts[index] := count +% 1;
 
       i +%= 1;
@@ -84,7 +84,7 @@ module {
     while (i <= to) {
       let iNat = nat(i);
 
-      array[iNat] := twin[iNat];
+      array[iNat] := twinArray[iNat];
 
       i +%= 1;
     };
@@ -92,7 +92,7 @@ module {
     i := from;
 
     while (i <= to) {
-      let count = gaplessCounts[nat(i)];
+      let count = shiftedCounts[nat(i)];
 
       if (count > 1) {
         if (count == 2) {
@@ -187,7 +187,7 @@ module {
           array[index3] := item3;
           array[index4] := item4;
         } else {
-          sort(array, map, twin, counts, gaplessCounts, true, i, i +% count -% 1);
+          sort(array, map, twinArray, counts, shiftedCounts, true, i, i +% count -% 1);
         };
       };
 
