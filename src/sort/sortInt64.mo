@@ -17,7 +17,7 @@ module {
     var sorted = true;
     var i = from +% 1;
 
-    while (i <= to) {
+    loop {
       let value = map(array[nat(i)]);
 
       if (value > max) max := value else if (value < min) min := value;
@@ -25,18 +25,18 @@ module {
       if (sorted) if (prevValue > value) sorted := false else prevValue := value;
 
       i +%= 1;
-    };
+    } while (i <= to);
 
     if (sorted) return;
 
     if (subArray) {
       i := from;
 
-      while (i <= to) {
+      loop {
         counts[nat(i)] := 0;
 
         i +%= 1;
-      };
+      } while (i <= to);
     };
 
     i := from;
@@ -46,19 +46,19 @@ module {
     let step = scale *% minMaxDiff / nat64(nat(to -% from));
     let from64 = nat64(nat(from));
 
-    while (i <= to) {
+    loop {
       let index = nat64ToNat(from64 +% scale *% int64ToNat64(map(array[nat(i)]) -% min) / step);
 
       counts[index] +%= 1;
 
       i +%= 1;
-    };
+    } while (i <= to);
 
     i := from;
 
     var totalCount = from;
 
-    while (i <= to) {
+    loop {
       let iNat = nat(i);
       let count = counts[iNat];
 
@@ -69,11 +69,11 @@ module {
       };
 
       i +%= 1;
-    };
+    } while (i <= to);
 
     i := from;
 
-    while (i <= to) {
+    loop {
       let item = array[nat(i)];
       let index = nat64ToNat(from64 +% scale *% int64ToNat64(map(item) -% min) / step);
       let count = counts[index];
@@ -82,21 +82,21 @@ module {
       counts[index] := count +% 1;
 
       i +%= 1;
-    };
+    } while (i <= to);
 
     i := from;
 
-    while (i <= to) {
+    loop {
       let iNat = nat(i);
 
       array[iNat] := twinArray[iNat];
 
       i +%= 1;
-    };
+    } while (i <= to);
 
     i := from;
 
-    while (i <= to) {
+    loop {
       let count = shiftedCounts[nat(i)];
 
       if (count > 1) {
@@ -197,7 +197,7 @@ module {
       };
 
       i +%= 1;
-    };
+    } while (i <= to);
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
