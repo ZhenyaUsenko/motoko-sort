@@ -63,10 +63,14 @@ actor Test {
       randomSeed +%= 1;
     };
 
+    var heap = Prim.rts_heap_size();
+
     let cost = IC.countInstructions(func() {
       //Array.sortInPlace(array, Nat32.compare);
       sortNat32<Nat32>(array, func(item) = item);
     });
+
+    heap := Prim.rts_heap_size() - heap;
 
     let iter = array.keys();
     var errorsCount = 0:Nat32;
@@ -77,6 +81,6 @@ actor Test {
       if (array[i - 1] > array[i]) errorsCount +%= 1;
     };
 
-    return "cost - " # debug_show(cost) # ", errors - " # debug_show(errorsCount);
+    return "cost - " # debug_show(cost) # ", heap - " # debug_show(heap) # ", errors - " # debug_show(errorsCount);
   };
 };
