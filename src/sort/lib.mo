@@ -1,4 +1,7 @@
+import SortBool "./sortBool";
+import SortBoolDesc "./sortBoolDesc";
 import SortFloat "./sortFloat";
+import SortFloatDesc "./sortFloatDesc";
 import SortInt8 "./sortInt8";
 import SortInt8Desc "./sortInt8Desc";
 import SortInt16 "./sortInt16";
@@ -17,7 +20,10 @@ import SortNat64 "./sortNat64";
 import SortNat64Desc "./sortNat64Desc";
 
 module {
+  public let { sortBool } = SortBool;
+  public let { sortBoolDesc } = SortBoolDesc;
   public let { sortFloat } = SortFloat;
+  public let { sortFloatDesc } = SortFloatDesc;
   public let { sortInt8 } = SortInt8;
   public let { sortInt8Desc } = SortInt8Desc;
   public let { sortInt16 } = SortInt16;

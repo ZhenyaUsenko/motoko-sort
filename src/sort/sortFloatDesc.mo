@@ -1,10 +1,10 @@
 import Prim "mo:prim";
-import { nat16ToNat32; nat64ToNat; intToNat32Wrap; nat32ToNat = nat; nat32ToNat64 = nat64 } "mo:prim";
+import { floatToInt64; int64ToFloat; int64ToNat64; nat64ToInt64; nat64ToNat; intToNat32Wrap; nat32ToNat = nat; nat32ToNat64 = nat64 } "mo:prim";
 
 module {
   func sort2<T>(
     array: [var T],
-    map: (item: T) -> Nat16,
+    map: (item: T) -> Float,
     from: Nat32,
   ) {
     let index1 = nat(from);
@@ -22,7 +22,7 @@ module {
 
   func sort3<T>(
     array: [var T],
-    map: (item: T) -> Nat16,
+    map: (item: T) -> Float,
     from: Nat32,
   ) {
     let index1 = nat(from);
@@ -62,7 +62,7 @@ module {
 
   func sort4<T>(
     array: [var T],
-    map: (item: T) -> Nat16,
+    map: (item: T) -> Float,
     from: Nat32,
   ) {
     let index1 = nat(from);
@@ -119,7 +119,7 @@ module {
 
   func sort<T>(
     array: [var T],
-    map: (item: T) -> Nat16,
+    map: (item: T) -> Float,
     twinArray: [var T],
     counts: [var Nat32],
     shiftedCounts: [var Nat32],
@@ -144,13 +144,11 @@ module {
 
       if (sorted) return;
 
-      let minMaxDiff = nat64(nat16ToNat32(max -% min));
-      let scale = 0xffffffffffffffff / minMaxDiff;
-      let step = scale *% minMaxDiff / nat64(to -% from);
-      let to64 = nat64(to);
+      let step = (max - min) / int64ToFloat(nat64ToInt64(nat64(to -% from)));
+      let toFloat = int64ToFloat(nat64ToInt64(nat64(to)));
 
       for (item in array.vals()) {
-        let index = nat64ToNat(to64 -% scale *% nat64(nat16ToNat32(map(item) -% min)) / step);
+        let index = nat64ToNat(int64ToNat64(floatToInt64(toFloat - (map(item) - min) / step)));
 
         counts[index] +%= 1;
       };
@@ -170,7 +168,7 @@ module {
       };
 
       for (item in array.vals()) {
-        let index = nat64ToNat(to64 -% scale *% nat64(nat16ToNat32(map(item) -% min)) / step);
+        let index = nat64ToNat(int64ToNat64(floatToInt64(toFloat - (map(item) - min) / step)));
         let count = counts[index];
 
         twinArray[nat(count)] := item;
@@ -225,13 +223,11 @@ module {
 
       i := from;
 
-      let minMaxDiff = nat64(nat16ToNat32(max -% min));
-      let scale = 0xffffffffffffffff / minMaxDiff;
-      let step = scale *% minMaxDiff / nat64(to -% from);
-      let to64 = nat64(to);
+      let step = (max - min) / int64ToFloat(nat64ToInt64(nat64(to -% from)));
+      let toFloat = int64ToFloat(nat64ToInt64(nat64(to)));
 
       loop {
-        let index = nat64ToNat(to64 -% scale *% nat64(nat16ToNat32(map(array[nat(i)]) -% min)) / step);
+        let index = nat64ToNat(int64ToNat64(floatToInt64(toFloat - (map(array[nat(i)]) - min) / step)));
 
         counts[index] +%= 1;
 
@@ -259,7 +255,7 @@ module {
 
       loop {
         let item = array[nat(i)];
-        let index = nat64ToNat(to64 -% scale *% nat64(nat16ToNat32(map(item) -% min)) / step);
+        let index = nat64ToNat(int64ToNat64(floatToInt64(toFloat - (map(item) - min) / step)));
         let count = counts[index];
 
         twinArray[nat(count)] := item;
@@ -302,9 +298,9 @@ module {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  public func sortNat16Desc<T>(
+  public func sortFloatDesc<T>(
     array: [var T],
-    map: (item: T) -> Nat16,
+    map: (item: T) -> Float,
   ) {
     let size = array.size();
 

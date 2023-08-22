@@ -4,7 +4,7 @@ import IC "mo:base/ExperimentalInternetComputer";
 import Nat32 "mo:base/Nat32";
 import Prim "mo:prim";
 import { time } "mo:prim";
-import { sortFloat } "./src/sort";
+import { sortBool; sortBoolDesc; sortFloat; sortFloatDesc } "./src/sort";
 import { sortInt8; sortInt8Desc; sortInt16; sortInt16Desc; sortInt32; sortInt32Desc; sortInt64; sortInt64Desc } "./src/sort";
 import { sortNat8; sortNat8Desc; sortNat16; sortNat16Desc; sortNat32; sortNat32Desc; sortNat64; sortNat64Desc } "./src/sort";
 
@@ -48,6 +48,10 @@ actor Test {
 
   func randomFloat(key: Nat64): Float {
     return Prim.intToFloat(Prim.nat64ToNat(randomNat64(key)));
+  };
+
+  func randomBool(key: Nat64): Bool {
+    return if (randomNat64(key) & 1 == 1) true else false;
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
