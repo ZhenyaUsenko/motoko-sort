@@ -8,7 +8,7 @@ import { sortBool; sortBoolDesc; sortFloat; sortFloatDesc } "./src/sort";
 import { sortInt8; sortInt8Desc; sortInt16; sortInt16Desc; sortInt32; sortInt32Desc; sortInt64; sortInt64Desc } "./src/sort";
 import { sortNat8; sortNat8Desc; sortNat16; sortNat16Desc; sortNat32; sortNat32Desc; sortNat64; sortNat64Desc } "./src/sort";
 
-actor Test {
+persistent actor Test {
   func randomNat64(key: Nat64): Nat64 {
     var hash = key;
 

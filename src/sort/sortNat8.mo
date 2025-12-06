@@ -33,24 +33,23 @@ module {
     var item3 = array[index3];
 
     if (map(item1) > map(item2)) {
-      let temp = item1;
+      let temp = item2;
 
-      item1 := item2;
-      item2 := temp;
+      item2 := item1;
+      item1 := temp;
     };
 
     if (map(item1) > map(item3)) {
-      let temp = item1;
+      let temp = item3;
 
-      item1 := item3;
-      item3 := temp;
-    };
+      item3 := item2;
+      item2 := item1;
+      item1 := temp;
+    } else if (map(item2) > map(item3)) {
+      let temp = item3;
 
-    if (map(item2) > map(item3)) {
-      let temp = item2;
-
-      item2 := item3;
-      item3 := temp;
+      item3 := item2;
+      item2 := temp;
     };
 
     array[index1] := item1;
@@ -75,37 +74,42 @@ module {
     var item4 = array[index4];
 
     if (map(item1) > map(item2)) {
-      let temp = item1;
+      let temp = item2;
 
-      item1 := item2;
-      item2 := temp;
-    };
-
-    if (map(item3) > map(item4)) {
-      let temp = item3;
-
-      item3 := item4;
-      item4 := temp;
+      item2 := item1;
+      item1 := temp;
     };
 
     if (map(item1) > map(item3)) {
-      let temp = item1;
+      let temp = item3;
 
-      item1 := item3;
-      item3 := temp;
+      item3 := item2;
+      item2 := item1;
+      item1 := temp;
+    } else if (map(item2) > map(item3)) {
+      let temp = item3;
+
+      item3 := item2;
+      item2 := temp;
     };
 
-    if (map(item2) > map(item4)) {
-      let temp = item2;
+    if (map(item1) > map(item4)) {
+      let temp = item4;
 
-      item2 := item4;
-      item4 := temp;
-    };
+      item4 := item3;
+      item3 := item2;
+      item2 := item1;
+      item1 := temp;
+    } else if (map(item2) > map(item4)) {
+      let temp = item4;
 
-    if (map(item2) > map(item3)) {
-      let temp = item2;
+      item4 := item3;
+      item3 := item2;
+      item2 := temp;
+    } else if (map(item3) > map(item4)) {
+      let temp = item4;
 
-      item2 := item3;
+      item4 := item3;
       item3 := temp;
     };
 
